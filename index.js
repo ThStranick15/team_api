@@ -1,31 +1,68 @@
+    class Phone {
+        screen = true
+        constructor(number, size, model, color){
+            this.number = number
+            this.size = size
+            this.model = model
+            this.color = color
+        }
 
-class Person{
-    constructor(name,age,hobbies){
-        this.name = name
-        this.age = age
-        this.hobbies = hobbies
+        printModel(){
+            console.log('Model:', 'Base')
+        }
     }
 
-    haveBirthday(){
-        this.age++
-        console.log('Happy Birthday',this.name)
+    class iPhone extends Phone{
+        facetime = true
+
+        constructor(number, size, model, color, appleID){
+            super(number, size, model, color)
+            this.itunes = true
+            this.appleID = appleID
+        }
+
+        printModel(){
+            console.log('iPhone:', this.model)
+        }
     }
 
-    printBirthday(){
-        console.log(`You are ${this.age} years old`)
+    class Samsung extends Phone{
+        foldable = true
     }
 
-    printHobbies(){
-        const arr = this.hobbies
-        arr.forEach(element => {
-            console.log(element)
-        });
-    }
-}
+    const jdPhone = new iPhone('123-456-7890', 'standard', '15', 'slate grey', 'adasda')
 
-const thomas =  new Person('thomas', 25, ['Coding', 'Gaming'])
+    console.log(jdPhone)
 
-thomas.printHobbies()
+// class Person{
+//     species = 'homosapien'
+
+//     constructor(name,age,hobbies){
+//         this.name = name
+//         this.age = age
+//         this.hobbies = hobbies
+//     }
+
+//     haveBirthday(){
+//         this.age++
+//         console.log('Happy Birthday',this.name)
+//     }
+
+//     printBirthday(){
+//         console.log(`You are ${this.age} years old`)
+//     }
+
+//     printHobbies(){
+//         const arr = this.hobbies
+//         arr.forEach(element => {
+//             console.log(element)
+//         });
+//     }
+// }
+
+// const thomas =  new Person('thomas', 25, ['Coding', 'Gaming'])
+
+// thomas.printHobbies()
 
 // function Person(name,age, hobbies){
 //     this.name = name
