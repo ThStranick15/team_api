@@ -1,89 +1,71 @@
-    class Phone {
-        screen = true
-        constructor(number, size, model, color){
-            this.number = number
-            this.size = size
-            this.model = model
-            this.color = color
-        }
+const express = require('express')
 
-        printModel(){
-            console.log('Model:', 'Base')
-        }
+const app = express()
+const PORT = 3333
+
+const data = [
+    {
+        id: 1,
+        name: 'Thomas',
+        age: 25
+    },
+    {
+        id: 2,
+        name: 'Kerry',
+        age: 25
+    },
+    {
+        id: 3,
+        name: 'Tiffany',
+        age: 24
     }
+]
 
-    class iPhone extends Phone{
-        facetime = true
+//Create GET route that listens for the user to visit the root address/domain
+//When visit root address trigger
+app.get('/', (req,res) => {
+    res.send('Hello World')
+})
 
-        constructor(number, size, model, color, appleID){
-            super(number, size, model, color)
-            this.itunes = true
-            this.appleID = appleID
-        }
+app.get('/api/:user_id', (req,res) =>{
+    const id = req.params.user_id
 
-        printModel(){
-            console.log('iPhone:', this.model)
-        }
+    const user = data.find((userObj) => {
+        if(userObj.id == id) return true
+    })
+
+    if(user){
+        return res.json(user)
     }
+    return res.json({
+        message: 'User not found matching id'
+    })
+})
 
-    class Samsung extends Phone{
-        foldable = true
+app.get('/about', (req,res) =>{
+    res.send('<h1>About Me</h1>')
+})
+
+app.get('/data', (req,res) =>{
+    const queryParams = req.query
+
+    //Create empty obj
+    const obj = {}
+    //If request name (name=true) then add property name to obj
+    if(queryParams.name === 'true'){
+        obj.name = 'Thomas'
     }
+    //If request age (age=true) then add age property to obj
+    if(queryParams.age === 'true'){
+        obj.age = '25'
+    }
+    //send the completed obj back in response
+    console.log(queryParams)
 
-    const jdPhone = new iPhone('123-456-7890', 'standard', '15', 'slate grey', 'adasda')
+    res.json(obj)
+})
 
-    console.log(jdPhone)
-
-// class Person{
-//     species = 'homosapien'
-
-//     constructor(name,age,hobbies){
-//         this.name = name
-//         this.age = age
-//         this.hobbies = hobbies
-//     }
-
-//     haveBirthday(){
-//         this.age++
-//         console.log('Happy Birthday',this.name)
-//     }
-
-//     printBirthday(){
-//         console.log(`You are ${this.age} years old`)
-//     }
-
-//     printHobbies(){
-//         const arr = this.hobbies
-//         arr.forEach(element => {
-//             console.log(element)
-//         });
-//     }
-// }
-
-// const thomas =  new Person('thomas', 25, ['Coding', 'Gaming'])
-
-// thomas.printHobbies()
-
-// function Person(name,age, hobbies){
-//     this.name = name
-//     this.age = age
-//     this.hobbies = hobbies
-// }
-
-
-
-// Person.prototype.haveBirthday = function (){
-//     this.age++
-//     console.log('Happy Birthday')
-// }
-
-// Person.prototype.printBirthday = function(){
-//     console.log(`You are ${this.age} years old`)
-// }
-
-// Person.prototype.species = 'homosapien'
-
-
-// thomas.haveBirthday()
-
-// thomas.printBirthday()
+//Start the server - tell the server to start listening for routes to be visited
+app.listen(PORT, () => {
+    console.log('Server running on port', PORT)
+})
