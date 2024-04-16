@@ -17,5 +17,39 @@
         <p class="route"><span>GET /api/users</span> - Returns all users</p>
         <p class="route"><span>GET /api/users/:ID</span> - Returns a single user by ID</p>
     </div>
+
+    <form action="/api/users/form" method="POST">
+        <input name="fullName" type="text" placeholder="Type your name">
+        <button>Submit</button>
+    </form>
+
+    <button id="send">Send</button>
+
+    <script>
+        const btn = document.querySelector('#send')
+        btn.addEventListener('click', () => {
+        // fetch('/api/users') //GET
+        //     .then(res => res.json())
+        //     .then(data =>{
+        //         console.log(data)
+        //     })
+
+        fetch('/api/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: 'Thomas',
+                age: 25
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message)
+        })
+        })
+        
+    </script>
 </body>
 </html>
