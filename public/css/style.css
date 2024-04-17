@@ -4,6 +4,37 @@ body {
     font-family: sans-serif;
 }
 
+input,button{
+    border: none;
+    border-radius: 3px;
+}
+
+button{
+    cursor: pointer;
+}
+
+form{
+    width: 400px;
+    margin: 0 auto;
+    display:flex;
+    flex-direction: column;
+}
+
+form > *{
+    padding: 7px 10px;
+    margin-bottom:6px;
+}
+
+form button {
+    background-color: rgb(99, 102, 255);
+    color: white;
+}
+
+pre{
+    background-color: #444;
+    padding: 15px
+}
+
 p.route span {
     color: yellow;
     background-color: #222;

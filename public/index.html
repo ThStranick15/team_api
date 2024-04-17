@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User API Documentation</title>
-    <link rel="stylesheet" href="/css/style.css"> 
+    <link rel="stylesheet" href="/css/style.css">
     <!-- all link tags send get request -->
 </head>
+
 <body>
     <h1 class="text-center">User API</h1>
     <p class="text-center">Welcome! Feel free to use our API and have fun.</p>
@@ -16,7 +18,14 @@
     <div>
         <p class="route"><span>GET /api/users</span> - Returns all users</p>
         <p class="route"><span>GET /api/users/:ID</span> - Returns a single user by ID</p>
-        <p class="route"><span>POST /api/users</span> - Adds a single user through form input below</p>
+        <p class="route"><span>POST /api/users</span> - Adds a single user through form input below. or send a JSON request in format:
+        <pre>
+            {
+                name: nameInput.value,
+                age: ageInput.value
+            }
+        </pre>
+        </p>
         <p class="route"><span>DELETE /api/users</span> - Deletes a single user by id through form input below</p>
     </div>
 
@@ -26,14 +35,14 @@
     </form> -->
 
     <form id="user-form" action="/api/users" method="POST">
-        <h2>User Form</h2>
+        <h2 class="text-center">User Form</h2>
         <input name="name" type="text" placeholder="Type your name">
         <input name="age" type="text" placeholder="Type your age">
         <button>Submit</button>
     </form>
 
     <form id="delete-form" action="/api/users" method="DELETE">
-        <h2>Delete Form</h2>
+        <h2 class="text-center">Delete Form</h2>
         <input name="id" type="text" placeholder="Type your id to delete">
         <button>Submit</button>
     </form>
@@ -41,47 +50,52 @@
     <script>
         const userForm = document.querySelector('#user-form')
         const deleteForm = document.querySelector('#delete-form')
-        userForm.addEventListener('submit', (e) =>{
+        userForm.addEventListener('submit', (e) => {
             e.preventDefault()
             const nameInput = e.target.name
             const ageInput = e.target.age
-        fetch('/api/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: nameInput.value,
-                age: ageInput.value
+
+            if(!nameInput.value || !ageInput.value){
+                return alert('You must enter a name and an age')
+            }
+            fetch('/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: nameInput.value,
+                    age: ageInput.value
+                })
             })
-        })
-        .then(res => res.json())
-        .then(data => {
-            alert(data.message)
-            nameInput.value = ''
-            ageInput.value = ''
-        })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message)
+                    nameInput.value = ''
+                    ageInput.value = ''
+                })
         })
 
         deleteForm.addEventListener('submit', (e) => {
             e.preventDefault()
             const idInput = e.target.id
-        fetch('/api/users', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: idInput.value
+            fetch('/api/users', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: idInput.value
+                })
             })
+                .then(res => res.json())
+                .then(data => {
+                    alert(data.message)
+                    idInput.value = ''
+                })
         })
-        .then(res => res.json())
-        .then(data => {
-            alert(data.message)
-            idInput.value = ''
-        })
-        })
-        
+
     </script>
 </body>
+
 </html>
