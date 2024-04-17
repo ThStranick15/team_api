@@ -16,37 +16,69 @@
     <div>
         <p class="route"><span>GET /api/users</span> - Returns all users</p>
         <p class="route"><span>GET /api/users/:ID</span> - Returns a single user by ID</p>
+        <p class="route"><span>POST /api/users</span> - Adds a single user through form input below</p>
+        <p class="route"><span>DELETE /api/users</span> - Deletes a single user by id through form input below</p>
     </div>
 
-    <form action="/api/users/form" method="POST">
+    <!-- <form action="/api/users/form" method="POST">
         <input name="fullName" type="text" placeholder="Type your name">
+        <button>Submit</button>
+    </form> -->
+
+    <form id="user-form" action="/api/users" method="POST">
+        <h2>User Form</h2>
+        <input name="name" type="text" placeholder="Type your name">
+        <input name="age" type="text" placeholder="Type your age">
         <button>Submit</button>
     </form>
 
-    <button id="send">Send</button>
+    <form id="delete-form" action="/api/users" method="DELETE">
+        <h2>Delete Form</h2>
+        <input name="id" type="text" placeholder="Type your id to delete">
+        <button>Submit</button>
+    </form>
 
     <script>
-        const btn = document.querySelector('#send')
-        btn.addEventListener('click', () => {
-        // fetch('/api/users') //GET
-        //     .then(res => res.json())
-        //     .then(data =>{
-        //         console.log(data)
-        //     })
-
+        const userForm = document.querySelector('#user-form')
+        const deleteForm = document.querySelector('#delete-form')
+        userForm.addEventListener('submit', (e) =>{
+            e.preventDefault()
+            const nameInput = e.target.name
+            const ageInput = e.target.age
         fetch('/api/users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                name: 'Thomas',
-                age: 25
+                name: nameInput.value,
+                age: ageInput.value
             })
         })
         .then(res => res.json())
         .then(data => {
             alert(data.message)
+            nameInput.value = ''
+            ageInput.value = ''
+        })
+        })
+
+        deleteForm.addEventListener('submit', (e) => {
+            e.preventDefault()
+            const idInput = e.target.id
+        fetch('/api/users', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: idInput.value
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert(data.message)
+            idInput.value = ''
         })
         })
         

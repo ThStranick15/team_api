@@ -1,9 +1,17 @@
 const router = require('express').Router()
-const { v4: generateID } = require('uuid');
-const data = require('../db/data')
+const { v4: generateID } = require('uuid')
+const fs = require('fs/promises')
+//const data = require('../db/users.json')
+
+async function getData(){
+    const data = await fs.readFile('./db/users.json', 'utf8')
+
+    return JSON.parse(data)
+}
 
 //GET all users
-router.get('/users', (req,res) => {
+router.get('/users', async (req,res) => {
+    const data = await getData()
     const nameQuery = req.query.name?.toLowerCase()
 
     if(nameQuery){
@@ -15,7 +23,8 @@ router.get('/users', (req,res) => {
 })
 
 //get user by id
-router.get('/users/:user_id', (req,res) => {
+router.get('/users/:user_id', async (req,res) => {
+    const data = await getData()
     const id = req.params.user_id
     
     res.json(data.find((el) => {
@@ -31,17 +40,49 @@ router.post('/users/form', (req,res) => {
     res.redirect('/')
 })
 //JS post request
-router.post('/users', (req,res) => {
+router.post('/users', async (req,res) => {
     const id = generateID()
+    const data = await getData()
+    if(!data.find((el) => el.name === req.body.name)){
+        data.push({
+            ...req.body,
+            id: id
+        })
 
-    data.push({
-        ...req.body,
-        id: id
-    })
+        await fs.writeFile('./db/users.json', JSON.stringify(data, null, 2))
 
+        res.json({
+            message: 'User added'
+        })
+    }
+    else{
+        res.json({
+            message: 'User NOT added'
+        })
+    }
+})
+
+//JS Delete Req
+router.delete('/users', async (req,res) => {
+    const data = await getData()
+    const delID = req.body.id
+    const delEl = data.find((el) => el.id == delID)
+    if(delEl){
+    const index = data.indexOf(delEl)
+    console.log(index)
+    data.splice(index, 1)
+    console.log(data)
+    await fs.writeFile('./db/users.json', JSON.stringify(data, null, 2))
     res.json({
-        message: 'User added'
+        message: 'User deleted'
     })
+    }
+    else{
+        res.json({
+            message: 'User NOT deleted'
+        })
+    }
+
 })
 
 module.exports = router
